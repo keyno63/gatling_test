@@ -1,0 +1,11 @@
+# intellij
+target/
+/.idea/
+project/target
+
+# h2 files
+*.db
+
+# vscode
+.ensime_cache/
+.metals/
