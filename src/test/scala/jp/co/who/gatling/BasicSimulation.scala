@@ -21,8 +21,7 @@ class BasicSimulation extends Simulation {
   val scn: ScenarioBuilder = scenario("BasicSimulation")
     .exec(http("request_1")
       .get("/")
-    .check(status.is(200),
-      jsonPath("$..foo")))
+    .check(status.is(200)))
     .pause(5)
 
   setUp(
