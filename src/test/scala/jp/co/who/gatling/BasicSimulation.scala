@@ -24,7 +24,28 @@ class BasicSimulation extends Simulation {
     .check(status.is(200)))
     .pause(5)
 
+  val scn2: ScenarioBuilder = scenario("BasicSimulation2")
+    .exec(http("request_2")
+      .get("/rawJson")
+      .check(
+        status.is(200),
+        getJson("$..part1.part2", true),
+        getJson("$..part1.str", "sample")
+      )
+    )
+    .pause(5)
+
+  def getJson[A: JsonFilter](path: String, value: A)
+  : CheckBuilder[JsonPathCheckType, JsonNode, A]
+    with SaveAs[JsonPathCheckType, JsonNode, A] =
+    jsonPath(path).ofType[A].is(value)
+
+  private val h = Seq(scn, scn2)
+    .map(_.inject(atOnceUsers(1)))
+    .toList
+  println(h)
+
   setUp(
-    scn.inject(atOnceUsers(1))
+    h
   ).protocols(httpConf)
 }
